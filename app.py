@@ -52,7 +52,7 @@ def recommend():
 		display_message = 'Recommended Energy-mix composition'
 
 	plt.figure(figsize = (8, 8))
-	plt.rcParams['font.size'] = 10
+	plt.rcParams['font.size'] = 9
 	plt.pie(energy_fractions, labels = sources, colors = colors, autopct='%.2f%%')
 	plt.title(display_message)
 	plt.savefig('static/output.png')
