@@ -34,23 +34,30 @@ def recommend():
 
 
 	energy_fractions = [solar, hydrogen, geothermal, natural_gas]
-	energy_fractions = [0 if round(energy, 1) <= 0 else energy for energy in energy_fractions]
-
-	zero_energy_fraction = energy_fractions.index(0)
-	energy_fractions.pop(zero_energy_fraction)
-
 	sources = ['Solar Energy', 'Hydrogen Energy', 'Geothermal Energy', 'Natural Gas']
-	sources.pop(zero_energy_fraction)
-	colors = sns.color_palette('pastel')[0:4]
 
-	plt.figure(figsize = (8, 8))
-	plt.rcParams['font.size'] = 8
-	plt.pie(energy_fractions, labels = sources, colors = colors, autopct='%.2f%%')
-	plt.savefig('static/output.png')
+
+	energy_fractions = [0 if round(energy, 1) <= 0 else energy for energy in energy_fractions]
+	zero_energy_fractions= [i for i in range(4) if energy_fractions[i] == 0]
+
+	energy_source_dict = {sources[i]:energy_fractions[i] for i in range(4) if i not in zero_energy_fractions}
+	sources = list(energy_source_dict.keys())
+	energy_fractions = list(energy_source_dict.values())
+	colors = sns.color_palette('pastel')[:len(sources)]
 
 	economical_value = round(economical_value, 2)
-	display_message = 'Recommended Energy-mix composition can save ' + str(economical_value) + ' USD excluding solar panel installation costs.'
+	if economical_value > 0:
+		display_message = 'Recommended Energy-mix composition can save ' + str(economical_value) + ' USD excluding solar panel installation costs.'
+	else:
+		display_message = 'Recommended Energy-mix composition'
 
+	plt.figure(figsize = (8, 8))
+	plt.rcParams['font.size'] = 10
+	plt.pie(energy_fractions, labels = sources, colors = colors, autopct='%.2f%%')
+	plt.title(display_message)
+	plt.savefig('static/output.png')
+
+	
 	return render_template('index.html', output_text = display_message, output_pieplot = 'static/output.png')
 
 if __name__ == "__main__":
