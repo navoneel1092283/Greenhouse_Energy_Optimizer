@@ -1,7 +1,5 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
-import plotly.express as px
-import pandas as pd
 from flask import Flask, request, jsonify, render_template
 from model import energy_mix_model
 import chart_studio
@@ -57,8 +55,8 @@ def recommend():
 		display_message = 'Recommended Energy-mix composition'
         
         
-	energy_mix_df = pd.DataFrame({'Energy Source': sources,
-                                  'Energy Fraction': energy_fractions})
+	energy_mix_df = pd.DataFrame({'Energy Sources': sources,
+                                  'Energy Fractions': energy_fractions})
         
 
 	#plt.figure(figsize = (8, 8))
@@ -67,12 +65,12 @@ def recommend():
 	#plt.title(display_message)
 	#plt.savefig('static/output.png')
     
-	fig = px.pie(energy_mix_df, values='Energy Fraction', names='Energy Source')
+	fig = px.pie(energy_mix_df, values='Energy Fractions', names='Energy Sources')
 	username = 'nchakrabarty'
 	api_key = 'PJuwonDUbCi4Vdbbru54'
     
 	chart_studio.tools.set_credentials_file(username = username, api_key = api_key)
-	output_plotlink = py.plot(fig, filename = 'Energy-mix Composition', auto_open = False)
+	output_plotlink = py.plot(fig, filename = 'Pie Chart Energy Distribution', auto_open = False)
 	output_plotlink = output_plotlink.split(':')[1][:-1] + '.embed'
     
     
